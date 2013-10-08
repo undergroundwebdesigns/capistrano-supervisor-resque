@@ -36,7 +36,7 @@ module CapistranoSupervisorResque
         end
 
         def supervisor_pid_command(supervised_worker)
-          "cat #{supervisor_command} pid #{supervised_worker}"
+          "#{supervisor_command} status #{supervised_worker} | sed -n '/RUNNING/s/.*pid \([[:digit:]]\+\).*/\1/p'"
         end
 
         def supervisor_start_command(supervised_worker)
@@ -107,7 +107,7 @@ module CapistranoSupervisorResque
           end
 
           desc "Resumes all workers by sending a CONT signal."
-          task :resume, :roles => lambda { workers_roles() }, :on_no_matching_servers => :continue do
+          task :resumepause, :roles => lambda { workers_roles() }, :on_no_matching_servers => :continue do
             for_each_workers do |role, workers|
               workers.each do |worker_identifier|
                 run("#{(use_sudo || supervisor_requires_sudo) ? "sudo" : ""} kill -s CONT `#{supervisor_pid_command(worker_identifier)}`", :roles => role)
