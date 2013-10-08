@@ -142,5 +142,5 @@ module CapistranoSupervisorResque
 end
 
 if Capistrano::Configuration.instance
-  CapistranoResque::CapistranoIntegration.load_into(Capistrano::Configuration.instance)
+  CapistranoSupervisorResque::CapistranoIntegration.load_into(Capistrano::Configuration.instance)
 end
