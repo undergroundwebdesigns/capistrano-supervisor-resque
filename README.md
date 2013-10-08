@@ -1,17 +1,20 @@
-# Capistrano Resque
+# Capistrano Supervisor Resque
 
-Basic tasks for putting some Resque in your Cap.
+Based on the Capistrano Resque plugin https://github.com/sshingler/capistrano-resque
+
+Capistrano task for managing resque workers and schedulers when the server uses supervisord
+to manage individusal processes.
 
 ### In your Gemfile:
 
 ```
-gem "capistrano-resque", "~> 0.1.0"
+gem "capistrano-supervisor-resque", "~> 0.1.0"
 ```
 
 ### In your Capfile:
 
 ```
-require "capistrano-resque"
+require "capistrano-supervisor-resque"
 ```
 
 ### In your deploy.rb:
@@ -20,21 +23,10 @@ require "capistrano-resque"
 role :resque_worker, "app_domain"
 role :resque_scheduler, "app_domain"
 
-set :workers, { "my_queue_name" => 2 }
-```
-
-You can also specify multiple queues and the number of workers
-for each queue:
+set :supervised_workers [ "supervisor_identifier" ]
+set :supervised_scheduler "supervisor_identifier"
 
 ```
-set :workers, { "archive" => 1, "mailing" => 3, "search_index, cache_warming" => 1 }
-```
-
-The above will start five workers in total:
-
- * one listening on the `archive` queue
- * one listening on the `search_index, cache_warming` queue
- * three listening on the `mailing` queue
 
 ### The tasks
 
@@ -59,6 +51,16 @@ add the following line to your `deploy.rb`:
 ```
 after "deploy:restart", "resque:restart"
 ```
+
+### Advanced
+
+Different workers can be configured to run on servers with different roles, or the default
+roles (resque_worker) can be over-ridden by setting supervised_workers to a hash keyed by role.
+
+```
+set :supervised_workers { :resque_worker => [ "supervisor_identifier" ] }
+```
+
 ### Logging
 
 Backgrounding and logging are current sticking points. I'm using the HEAD of resque's 1-x-stable branch for the 0.0.8 release because it has some new logging functions not yet slated for a resque release.
