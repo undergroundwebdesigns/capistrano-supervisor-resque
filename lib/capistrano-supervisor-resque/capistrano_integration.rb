@@ -13,17 +13,17 @@ module CapistranoSupervisorResque
         _cset(:supervisorctl_path, "supervisorctl")
 
         def workers_roles
-          return workers.keys if workers.first[1].is_a? Hash
+          return supervised_workers.keys if supervised_workers.first[1].is_a? Hash
           [:resque_worker]
         end
 
         def for_each_workers(&block)
-          if workers.first[1].is_a? Hash
+          if sueprvised_workers.first[1].is_a? Hash
             workers_roles.each do |role|
-              yield(role.to_sym, workers[role.to_sym])
+              yield(role.to_sym, supervised_workers[role.to_sym])
             end
           else
-            yield(:resque_worker,workers)
+            yield(:resque_worker,supervised_workers)
           end
         end
 
