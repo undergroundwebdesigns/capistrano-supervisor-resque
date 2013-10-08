@@ -107,7 +107,7 @@ module CapistranoSupervisorResque
           end
 
           desc "Resumes all workers by sending a CONT signal."
-          task :pause, :roles => lambda { workers_roles() }, :on_no_matching_servers => :continue do
+          task :resume, :roles => lambda { workers_roles() }, :on_no_matching_servers => :continue do
             for_each_workers do |role, workers|
               workers.each do |worker_identifier|
                 run("#{(use_sudo || supervisor_requires_sudo) ? "sudo" : ""} kill -s CONT `#{supervisor_pid_command(worker_identifier)}`", :roles => role)
