@@ -18,7 +18,7 @@ module CapistranoSupervisorResque
         end
 
         def for_each_workers(&block)
-          if sueprvised_workers.first[1].is_a? Hash
+          if supervised_workers.first[1].is_a? Hash
             workers_roles.each do |role|
               yield(role.to_sym, supervised_workers[role.to_sym])
             end
