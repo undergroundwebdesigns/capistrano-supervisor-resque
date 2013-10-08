@@ -101,7 +101,7 @@ module CapistranoSupervisorResque
           task :pause, :roles => lambda { workers_roles() }, :on_no_matching_servers => :continue do
             for_each_workers do |role, workers|
               workers.each do |worker_identifier|
-                run("#{(use_sudo) ? "sudo" : ""} kill -s USER2 `#{supervisor_pid_command(worker_identifier)}`", :roles => role)
+                run("#{(use_sudo) ? "sudo" : ""} kill -s USR2 `#{supervisor_pid_command(worker_identifier)}`", :roles => role)
               end
             end
           end
