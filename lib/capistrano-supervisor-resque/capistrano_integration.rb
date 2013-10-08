@@ -36,7 +36,7 @@ module CapistranoSupervisorResque
         end
 
         def supervisor_pid_command(supervised_worker)
-          "#{supervisor_command} status #{supervised_worker} | sed -n '/RUNNING/s/.*pid \\([[:digit:]]\\+\\).*/\\1/p'"
+          "#{supervisor_command} status #{supervised_worker} " + '| sed -n \'/RUNNING/s/.*pid \([[:digit:]]\+\).*/\1/p\''
         end
 
         def supervisor_start_command(supervised_worker)
